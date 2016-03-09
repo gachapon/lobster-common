@@ -1,0 +1,257 @@
+require 'securerandom' # For generating new UUIDs.
+
+module Lobster
+
+  # Universally unique identifier.
+  # Items with distinct different UUIDs should be different entities.
+  # Items with the same UUID should be the same entity.
+  # @note The naming scheme used for this class is as follows:
+  #   * +uuid+     - An instance of this class.
+  #   * +value+    - Packed string, not human readable. 16 bytes in length.
+  #   * +uuid_str+ - Formatted string, human readable. Formatted as xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (8-4-4-12).
+  class Uuid
+    include Comparable
+
+    # Raw, packed byte string containing the UUID's value.
+    # @return [String] Packed string, 16 bytes in length.
+    attr_reader :value
+
+    # Creates a new randomly generated UUID or one from an existing value.
+    # @param value [String, nil] When omitted, a random UUID is generated.
+    #   When specified, a UUID will be created with its value.
+    #   The value must be a string of 16 bytes (128 bits).
+    def initialize(value = nil)
+      if value.nil?
+        # When the value is omitted, generate a new, random UUID.
+        @value = generate_new
+
+      elsif value.is_a? String
+        # A value was provided. It should contain the packed value.
+        fail ArgumentError, 'Packed UUID value must be 16 bytes.' unless value.length == 16
+        @value = value
+
+      else
+        # Got something unexpected.
+        fail ArgumentError
+
+      end
+
+      # Prevent modification.
+      @value.freeze
+    end
+
+    # Determines whether a string contains a valid formatted UUID.
+    # @param uuid_str [String] String to check.
+    # @return [Boolean] +true+ if the string contains a valid formatted UUID, +false+ otherwise.
+    def self.valid_str?(uuid_str)
+      if uuid_str.is_a? String
+        # Check the formatting.
+        # Note that the validity of the UUID isn't checked.
+        !!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.match(uuid_str)
+      else
+        # A string wasn't passed in.
+        fail ArgumentError
+      end
+    end
+
+    # Converts a UUID formatted as a string into its packed byte representation.
+    # @param uuid_str [String] UUID in string form.
+    # @return [String] Packed string, 16 bytes in length.
+    # @!visibility private
+    def self.pack_uuid_str(uuid_str)
+      # 1) Strip hyphens.
+      # 2) Collect 2 characters.
+      # 3) Convert 2 characters from hex to numeric.
+      # 4) Pack the numeric values into bytes in a string.
+      uuid_str.gsub('-', '').scan(/../).map(&:hex).pack('C16')
+    end
+
+    # Creates a UUID object from its string representation.
+    # @param uuid_str [String] UUID in string form.
+    #   The string must be in the form: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (8-4-4-12)
+    # @note Casing does not matter for a-f.
+    # @return [Uuid, nil] +nil+ will be returned if the string doesn't have a properly formatted UUID.
+    def self.parse(uuid_str)
+      if valid_str?(uuid_str)
+        # Properly formatted UUID string.
+        # Pack the UUID into a byte string and return a new instance.
+        value = pack_uuid_str(uuid_str)
+        Uuid.new(value)
+      else
+        # Not properly formatted.
+        nil
+      end
+    end
+
+    # Checks for hash equality of two UUIDs.
+    # @param other [Uuid] Other UUID to compare against.
+    # @return [Boolean] +true+ if the UUIDs are equal or +false+ if they aren't.
+    # @note This method compares only {Uuid} instances.
+    #   +false+ will be returned if +other+ is not a {Uuid}.
+    def eql?(other)
+      if other.is_a?(Uuid)
+        eq_uuid(other)
+      else
+        false
+      end
+    end
+
+    # Checks if two UUIDs have the same value.
+    # @param other [Uuid, String] Other object to check against.
+    # @return [Boolean] +true+ if the UUIDs are equal or +false+ if they aren't.
+    def ==(other)
+      case other
+        when Uuid
+          # Compare two UUID instances.
+          eq_uuid(other)
+
+        when String
+          if other.length == 16
+            # Compare against a packed string
+            eq_packed(other)
+
+          else
+            # Compare against a formatted string
+            eq_formatted(other)
+          end
+
+        else
+          # Everything else can't be equated.
+          false
+      end
+    end
+
+    # Compares two UUIDs to each other to determine which is lower.
+    # @param other [Uuid, String] Other object to compare against.
+    # @return [Fixnum] -1 if the left UUID is smaller, 0 if they're the same, or 1 if the right UUID is smaller.
+    #   +nil+ will be returned if the right side isn't a UUID.
+    def <=>(other)
+      case other
+        when Uuid
+          # Compare two UUID instances.
+          cmp_uuid(other)
+
+        when String
+          if other.length == 16
+            # Compare against a packed string
+            cmp_packed(other)
+
+          else
+            # Compare against a formatted string
+            cmp_formatted(other)
+          end
+
+        else
+          # Everything else can't be compared.
+          nil
+      end
+    end
+
+    # Produces a hash value of the UUID.
+    # @return [Fixnum]
+    def hash
+      @value.hash
+    end
+
+    # Produces the string representation of the UUID.
+    # @return [String] UUID in string form: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (8-4-4-12)
+    def to_s
+      bytes = @value.bytes
+      sprintf('%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x', *bytes)
+    end
+
+    # Empty UUID.
+    # @return [Uuid] UUID with the value 00000000-0000-0000-0000-000000000000.
+    DEFAULT = Uuid.new("\x0" * 16).freeze
+
+    private
+
+    # Generates a new (and random) UUID
+    # @return [String] Packed string containing the UUID's value.
+    def generate_new
+      # A built-in method from Ruby to generate a valid UUID is SecureRandom.uuid.
+      # However, it returns it as a formatted string.
+      # The formatted string has to be converted to a packed string before it can be used.
+      uuid_str = SecureRandom.uuid
+      self.class.pack_uuid_str(uuid_str)
+    end
+
+    # Checks for equality between two UUID instances.
+    # @param other [Uuid] Other UUID to compare against.
+    # @return [Boolean] +true+ if the two instances are equal, +false+ otherwise.
+    def eq_uuid(other)
+      eq_packed(other.value)
+    end
+
+    # Checks for equality with a packed string.
+    # @param value [String] Packed string.
+    # @return [Boolean] +true+ if the packed string contains an identical value, +false+ otherwise.
+    def eq_packed(value)
+      # Compare the bytes in each string.
+      # Byte comparison *must* be used, since == uses character comparison.
+      # Bytes != characters when encoding is involved.
+      @value.each_byte.with_index do |byte_a, i|
+        byte_b = value.getbyte(i)
+        break false if byte_a != byte_b # Abort enumeration with false value.
+        break true if i == 15 # Return true on last iteration when bytes are the same.
+      end
+    end
+
+    # Checks for equality with a UUID formatted as a string.
+    # @param uuid_str [String] UUID formatted as a string.
+    # @return [Boolean] +true+ if the formatted string contains an identical value, +false+ otherwise.
+    def eq_formatted(uuid_str)
+      if self.class.valid_str?(uuid_str)
+        # Format is valid.
+        # Compare it to packed string.
+        value = self.class.pack_uuid_str(uuid_str)
+        eq_packed(value)
+      else
+        # Invalid format can't be equal.
+        false
+      end
+    end
+
+    # Compares the ordering between two UUID instances.
+    # @param other [Uuid] Other UUID to compare against.
+    # @return [Fixnum] -1 if the left UUID is smaller, 0 if they're the same, or 1 if the right UUID is smaller.
+    #   +nil+ will be returned if the right side isn't a UUID.
+    def cmp_uuid(other)
+      cmp_packed(other.value)
+    end
+
+    # Compares the ordering with a packed string.
+    # @param value [String] Packed string.
+    # @return [Fixnum] -1 if the left UUID is smaller, 0 if they're the same, or 1 if the right UUID is smaller.
+    #   +nil+ will be returned if the right side isn't a UUID.
+    def cmp_packed(value)
+      # Compare the bytes in each string.
+      # Byte comparison *must* be used, since <=> uses character comparison.
+      # Bytes != characters when encoding is involved.
+      @value.bytes.each_with_index do |byte_a, i|
+        byte_b = value.getbyte(i)
+        result = byte_a <=> byte_b
+        break result if result != 0 # Abort enumeration with result.
+        break 0 if i == 15 # Return 0 on last byte if they're the same.
+      end
+    end
+
+    # Checks for equality with a UUID formatted as a string.
+    # @param uuid_str [String] UUID formatted as a string.
+    # @return [Fixnum] -1 if the left UUID is smaller, 0 if they're the same, or 1 if the right UUID is smaller.
+    #   +nil+ will be returned if the right side isn't a UUID.
+    def cmp_formatted(uuid_str)
+      if self.class.valid_str?(uuid_str)
+        # Format is valid.
+        # Compare it to packed string.
+        value = self.class.pack_uuid_str(uuid_str)
+        cmp_packed(value)
+      else
+        # Invalid format can't be equal.
+        nil
+      end
+    end
+
+  end
+
+end

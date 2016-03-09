@@ -1,5 +1,6 @@
+module Lobster
+end
+
 require 'lobster/version'
 
-module Lobster
-  # Your code goes here...
-end
+require 'lobster/uuid'
