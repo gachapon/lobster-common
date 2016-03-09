@@ -1,3 +1,11 @@
+# Code Climate test coverage.
+begin
+  require 'codeclimate-test-reporter'
+  CodeClimate::TestReporter.start
+rescue
+  # Continue without Code Climate test coverage.
+end
+
 require 'rspec'
 
 RSpec.configure do |config|
