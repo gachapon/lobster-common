@@ -5,7 +5,7 @@ require 'lobster/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'lobster-common'
-  spec.version       = Lobster::Common::VERSION
+  spec.version       = Lobster::VERSION
   spec.authors       = ['dotMaiku']
   spec.email         = ['dotMaiku@gmail.com']
   spec.summary       = %q{TODO: Write a short summary. Required.}
