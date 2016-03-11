@@ -337,21 +337,23 @@ RSpec.describe Lobster::Uuid do
   describe '#to_s' do
     subject { Lobster::Uuid.new(UUID_PACKED_STRING1).to_s }
 
-    it { should be_a(String) }
+    it 'is a String' do
+      is_expected.to be_a String
+    end
 
     it 'is a valid UUID string' do
-      expect(subject).to match(VALID_UUID_REGEX)
+      is_expected.to match(VALID_UUID_REGEX)
     end
 
     it 'equals the initial value' do
-      expect(subject).to eq(UUID_STRING1)
+      is_expected.to eq(UUID_STRING1)
     end
 
     context 'with bytes less than 16' do
       subject { Lobster::Uuid.new("\x05\x30\x5d\x54\x75\x02\x43\x1b\xad\xb2\xeb\x6b\x9e\x54\x60\x00").to_s }
 
       it 'pads with zeroes' do
-        expect(subject).to eq('05305d54-7502-431b-adb2-eb6b9e546000')
+        is_expected.to eq('05305d54-7502-431b-adb2-eb6b9e546000')
       end
     end
   end
