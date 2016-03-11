@@ -7,6 +7,7 @@ rescue
 end
 
 require 'rspec'
+require 'factory_girl'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
@@ -81,7 +82,14 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
+
+  # Include FactoryGirl for building test objects.
+  config.include FactoryGirl::Syntax::Methods
 end
 
 # Include Lobster.
 require_relative '../lib/lobster'
+
+# Include factories.
+FactoryGirl.definition_file_paths << File.join(File.dirname(__FILE__), 'factories')
+FactoryGirl.find_definitions
