@@ -8,3 +8,5 @@ require 'lobster/error'
 require 'lobster/result'
 require 'lobster/uuid'
 require 'lobster/identifiable'
+
+require 'lobster/users'
