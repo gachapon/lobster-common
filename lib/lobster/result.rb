@@ -1,3 +1,5 @@
+require_relative 'error'
+
 module Lobster
 
   # Wraps a value or error depending on the outcome of some action.
@@ -74,6 +76,7 @@ module Lobster
     # @note This method should not be called directly.
     #   It should be called from {self.success} or {self.failure}.
     def initialize(is_ok, value_error)
+      fail ArgumentError unless(is_ok || value_error.is_a?(Error))
       @is_ok       = is_ok
       @value_error = value_error
     end

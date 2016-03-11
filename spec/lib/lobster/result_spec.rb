@@ -115,4 +115,12 @@ RSpec.describe Lobster::Result do
       end
     end
   end
+
+  describe '.failure' do
+    context 'with non-error' do
+      it 'rejects the value' do
+        expect { Lobster::Result.failure('foobar') }.to raise_error ArgumentError
+      end
+    end
+  end
 end
