@@ -110,6 +110,35 @@ RSpec.describe Lobster::Uuid do
     end
   end
 
+  describe '#eql?' do
+    subject(:uuid) { Lobster::Uuid.new(UUID_PACKED_STRING1) }
+    subject { uuid.eql?(other) }
+
+    context 'with two identical UUIDs' do
+      let(:other) { Lobster::Uuid.new(UUID_PACKED_STRING1) }
+
+      it 'returns true' do
+        is_expected.to eq true
+      end
+    end
+
+    context 'with two different UUIDs' do
+      let(:other) { Lobster::Uuid.new(UUID_PACKED_STRING2) }
+
+      it 'returns false' do
+        is_expected.to eq false
+      end
+    end
+
+    context 'without a UUID' do
+      let(:other) { 'foobar' }
+
+      it 'returns false' do
+        is_expected.to eq false
+      end
+    end
+  end
+
   describe '#==' do
     subject { first == second }
     let(:first) { Lobster::Uuid.new(UUID_PACKED_STRING1) }
