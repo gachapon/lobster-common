@@ -63,7 +63,7 @@ module Lobster
       # 2) Collect 2 characters.
       # 3) Convert 2 characters from hex to numeric.
       # 4) Pack the numeric values into bytes in a string.
-      uuid_str.gsub('-', '').scan(/../).map(&:hex).pack('C16')
+      uuid_str.delete('-').scan(/../).map(&:hex).pack('C16')
     end
 
     # Creates a UUID object from its string representation.
