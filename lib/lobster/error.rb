@@ -18,10 +18,14 @@ module Lobster
     # @param code [Fixnum] Integer code representing the error type.
     # @param data [Hash{Symbol => String}] Extra information associated with the error.
     def initialize(code, data = {})
+      fail ArgumentError unless code.is_a?(Fixnum)
       @code = code
-      @data = Hash[data.map do |k, v|
-        [k, v.to_s.freeze]
-      end].freeze
+      @data = if data.nil?
+                Hash.new.freeze
+              else
+                fail ArgumentError unless data.is_a?(Hash)
+                dup_hash(data).freeze
+              end
     end
 
     # Generates a string representation of the error.
@@ -44,6 +48,17 @@ module Lobster
       Lobster::ErrorCodes.constants.find do |constant|
         Lobster::ErrorCodes.const_get(constant) == code
       end || code
+    end
+
+    private
+
+    # Duplicates the contents of a hash.
+    # @param data [Hash{Symbol => String}] Hash to duplicate.
+    # @return [Hash{Symbol => String}] Duplicated hash contents.
+    def dup_hash(data)
+      Hash[data.map do |k, v|
+        [k, v.to_s.freeze]
+      end]
     end
 
   end
