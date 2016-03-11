@@ -72,7 +72,7 @@ module Lobster
     #   or the error describing the cause of the failure.
     #   If +is_ok+ is +true+, then this should be the first option.
     #   If +is_ok+ is +false+, then this should be the latter option.
-    # @!private
+    # @private
     # @note This method should not be called directly.
     #   It should be called from {self.success} or {self.failure}.
     def initialize(is_ok, value_error)
