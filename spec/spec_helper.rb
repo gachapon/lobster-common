@@ -90,6 +90,9 @@ end
 # Include Lobster.
 require_relative '../lib/lobster'
 
+# Include helper utilities.
+require_relative 'time_helper'
+
 # Include factories.
 FactoryGirl.definition_file_paths << File.join(File.dirname(__FILE__), 'factories')
 FactoryGirl.find_definitions
