@@ -10,7 +10,8 @@ module Lobster
 
       # Date and time the user last logged in.
       # This can also be thought of as the last time the user went from offline to online.
-      # @return [Time]
+      # @note This attribute will be +nil+ if a user hasn't logged in.
+      # @return [Time, nil]
       attr_accessor :last_login
 
       # Date and time the member registered an account.
