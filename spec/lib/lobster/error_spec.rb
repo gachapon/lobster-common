@@ -49,7 +49,7 @@ RSpec.describe Lobster::Error do
     end
 
     it 'has the expected format' do
-      is_expected.to match /^Error: /
+      is_expected.to match(/^Error: /)
     end
 
     it 'uses the symbol name' do
@@ -65,7 +65,7 @@ RSpec.describe Lobster::Error do
       let(:code) { -1 }
 
       it 'uses the numerical value' do
-        is_expected.to match /^Error: -1/
+        is_expected.to match(/^Error: -1/)
       end
     end
 
