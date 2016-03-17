@@ -77,7 +77,7 @@ module Lobster
       # Generates a string representation of the user's info.
       # @return [String] +Clearance("Alias" UUID)+
       def to_s
-        fail NotImplementedError
+        "#{clearance.capitalize}(\"#{name}\" #{id})"
       end
 
       class << self
@@ -89,7 +89,11 @@ module Lobster
         # @param last_login [Time] Last time the user came online.
         # @return [User] Guest user.
         def guest(id, name, is_online, last_login)
-          fail NotImplementedError
+          fail ArgumentError unless id.is_a?(Uuid)
+          fail ArgumentError unless name.is_a?(String)
+          fail ArgumentError unless last_login.is_a?(Time)
+
+          User.new(id, name, !!is_online, :guest, nil, last_login)
         end
 
         # Creates a new member user.
@@ -106,7 +110,28 @@ module Lobster
         # @param last_login [Time] Last time the user came online.
         # @return [User] Member user.
         def member(id, name, is_online, clearance, registration, last_login)
-          fail NotImplementedError
+          fail ArgumentError unless id.is_a?(Uuid)
+          fail ArgumentError unless name.is_a?(String)
+          fail ArgumentError unless(last_login.nil? || last_login.is_a?(Time))
+          fail ArgumentError unless verify_clearance(clearance)
+          fail ArgumentError if clearance == :guest
+          fail ArgumentError if((registration.nil? && clearance != :super) || !registration.is_a?(Time))
+
+          User.new(id, name, !!is_online, clearance, registration, last_login)
+        end
+
+        private
+
+        # Checks if a clearance is one of the valid symbols.
+        # @param clearance [Symbol] Clearance value to check.
+        # @return [Boolean] +true+ if +clearance+ is valid.
+        def verify_clearance(clearance)
+          case(clearance)
+            when :guest, :member, :mod, :admin, :super
+              true
+            else
+              false
+          end
         end
 
       end
