@@ -164,8 +164,8 @@ RSpec.describe Lobster::Users::User do
     describe '#to_s' do
       subject { user.to_s }
 
-      it 'contains Guest' do
-        is_expected.to include 'Guest'
+      it 'contains Member' do
+        is_expected.to include 'Member'
       end
     end
   end
@@ -332,8 +332,8 @@ RSpec.describe Lobster::Users::User do
     describe '#to_s' do
       subject { user.to_s }
 
-      it 'contains Moderator' do
-        is_expected.to include 'Moderator'
+      it 'contains Mod' do
+        is_expected.to include 'Mod'
       end
     end
   end
@@ -416,8 +416,8 @@ RSpec.describe Lobster::Users::User do
     describe '#to_s' do
       subject { user.to_s }
 
-      it 'contains Administrator' do
-        is_expected.to include 'Administrator'
+      it 'contains Admin' do
+        is_expected.to include 'Admin'
       end
     end
   end
@@ -444,8 +444,8 @@ RSpec.describe Lobster::Users::User do
     describe '#member?' do
       subject { user.member? }
 
-      it 'is true' do
-        is_expected.to eq true
+      it 'is false' do
+        is_expected.to eq false
       end
     end
 
@@ -492,8 +492,8 @@ RSpec.describe Lobster::Users::User do
     describe '#registration' do
       subject { user.registration }
 
-      it 'is a Time' do
-        is_expected.to be_a Time
+      it 'is nil' do
+        is_expected.to eq nil
       end
     end
 
@@ -625,7 +625,7 @@ RSpec.describe Lobster::Users::User do
       let(:is_online) { nil }
 
       it 'sets the user as offline' do
-        expect(subject.online?).to eq true
+        expect(subject.online?).to eq false
       end
     end
 
@@ -699,7 +699,7 @@ RSpec.describe Lobster::Users::User do
       let(:is_online) { nil }
 
       it 'sets the user as offline' do
-        expect(subject.online?).to eq true
+        expect(subject.online?).to eq false
       end
     end
 

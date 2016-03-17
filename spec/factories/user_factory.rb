@@ -41,10 +41,10 @@ FactoryGirl.define do
     end
 
     initialize_with do
-      if clearance == :guest
-        Lobster::Users::User.guest(id, name, is_online, last_login)
-      else
+      if registration
         Lobster::Users::User.member(id, name, is_online, clearance, registration, last_login)
+      else
+        Lobster::Users::User.guest(id, name, is_online, last_login)
       end
     end
 
