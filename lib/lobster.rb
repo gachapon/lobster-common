@@ -1,12 +1,12 @@
 module Lobster
 end
 
-require 'lobster/version'
+require_relative 'lobster/version'
 
-require 'lobster/error_codes'
-require 'lobster/error'
-require 'lobster/result'
-require 'lobster/uuid'
-require 'lobster/identifiable'
+require_relative 'lobster/error_codes'
+require_relative 'lobster/error'
+require_relative 'lobster/result'
+require_relative 'lobster/uuid'
+require_relative 'lobster/identifiable'
 
-require 'lobster/users'
+require_relative 'lobster/users'
