@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :user, aliases: [:member], class: Lobster::Users::User, parent: :user_base do
+  factory :user, aliases: [:member], class: Lobster::Users::User do
     sequence(:name) { |n| "Test User #{n}" }
     id { Lobster::Uuid.new }
     last_login { 2.days.ago }
@@ -14,6 +14,7 @@ FactoryGirl.define do
 
     trait :never_logged_in do
       last_login nil
+      is_online false
     end
 
     trait :mod do
@@ -46,9 +47,9 @@ FactoryGirl.define do
         Lobster::Users::User.member(id, name, is_online, clearance, registration, last_login)
       end
     end
-  end
 
-  factory :guest, traits: [:guest]
-  factory :moderator, traits: [:mod]
-  factory :administrator, traits: [:admin]
+    factory :guest, traits: [:guest]
+    factory :moderator, traits: [:mod]
+    factory :administrator, traits: [:admin]
+  end
 end
