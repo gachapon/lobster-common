@@ -2,6 +2,7 @@ module Lobster
 end
 
 require_relative 'lobster/version'
+require_relative 'lobster/abstract_attribute'
 
 require_relative 'lobster/error_codes'
 require_relative 'lobster/error'
