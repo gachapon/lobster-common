@@ -9,7 +9,7 @@ module Lobster
       # This is the string that all others see as the user's name.
       # @note The word +name+ is commonly used in place of +alias+ because +alias+ is a Ruby keyword.
       # @return [String]
-      attr_accessor :alias
+      attr_reader :alias
 
       alias_method :name, :alias
 

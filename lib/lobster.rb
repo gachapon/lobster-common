@@ -1,3 +1,4 @@
+# Top-level namespace for all lobster chat system classes.
 module Lobster
 end
 

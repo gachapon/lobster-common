@@ -21,28 +21,6 @@ RSpec.describe Lobster::Uuid do
   end
   
   describe '#new' do
-    context 'with no parameters' do
-      subject(:uuid) { Lobster::Uuid.new }
-
-      describe 'the value' do
-        subject { uuid.value }
-
-        # The chances of a randomly generated empty UUID is virtually impossible.
-        # Besides, the UUID standards don't allow generated UUID to be all zeroes.
-        it 'is random' do
-          is_expected.not_to eq("\x0" * 16)
-        end
-      end
-
-      describe 'the string' do
-        subject { uuid.to_s }
-
-        it 'is valid' do
-          is_expected.to match VALID_UUID_REGEX
-        end
-      end
-    end
-
     context 'with a valid value' do
       subject(:uuid) { Lobster::Uuid.new(UUID_PACKED_STRING1) }
 
@@ -56,15 +34,33 @@ RSpec.describe Lobster::Uuid do
     end
 
     context 'with an invalid value' do
-      it 'rejects a non-string' do
-        expect { Lobster::Uuid.new(5) }.to raise_error(ArgumentError)
-      end
-
       it 'rejects a malformed string' do
         expect { Lobster::Uuid.new('foobar') }.to raise_error(ArgumentError)
       end
     end
 
+  end
+
+  context '.generate' do
+    subject(:uuid) { Lobster::Uuid.generate }
+
+    describe 'the value' do
+      subject { uuid.value }
+
+      # The chances of a randomly generated empty UUID is virtually impossible.
+      # Besides, the UUID standards don't allow generated UUID to be all zeroes.
+      it 'is random' do
+        is_expected.not_to eq("\x0" * 16)
+      end
+    end
+
+    describe 'the string' do
+      subject { uuid.to_s }
+
+      it 'is valid' do
+        is_expected.to match VALID_UUID_REGEX
+      end
+    end
   end
 
   describe '.parse' do
