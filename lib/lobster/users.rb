@@ -8,3 +8,4 @@ end
 
 require_relative 'users/user_base'
 require_relative 'users/user'
+require_relative 'users/guest'
