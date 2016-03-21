@@ -1,7 +1,9 @@
 Lobster Common
 ==============
 
-TODO: Write a gem description
+Common structures and libraries for the lobster chat system.
+This gem doesn't contain any logic.
+Rather, it contains the "language" needed for clients and servers to communicate.
 
 Installation
 ------------

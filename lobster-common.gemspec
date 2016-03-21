@@ -8,8 +8,10 @@ Gem::Specification.new do |spec|
   spec.version       = Lobster::VERSION
   spec.authors       = ['dotMaiku']
   spec.email         = ['dotMaiku@gmail.com']
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{Common structures and libraries for the lobster chat system.}
+  spec.description   = %q{Structures and utilities used by the lobster chat system.
+This gem doesn't contain any logic.
+Rather, it contains the "language" needed for clients and servers to communicate.}
   spec.homepage      = ''
   spec.license       = 'MIT'
 
