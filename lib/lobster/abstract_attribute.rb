@@ -1,3 +1,4 @@
+# Custom class attributes.
 class Class
 
   # Defines an abstract method.
