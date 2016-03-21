@@ -115,7 +115,9 @@ module Lobster
           fail ArgumentError unless(last_login.nil? || last_login.is_a?(Time))
           fail ArgumentError unless verify_clearance(clearance)
           fail ArgumentError if clearance == :guest
-          fail ArgumentError if((registration.nil? && clearance != :super) || !registration.is_a?(Time))
+          unless registration.is_a?(Time)
+            fail ArgumentError if(!registration.nil? || clearance != :super)
+          end
 
           User.new(id, name, !!is_online, clearance, registration, last_login)
         end
