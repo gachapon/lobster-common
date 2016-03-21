@@ -1,11 +1,13 @@
 FactoryGirl.define do
   factory :user, aliases: [:member], class: Lobster::Users::User do
-    sequence(:name) { |n| "Test User #{n}" }
-    id { Lobster::Uuid.generate }
-    last_login { 2.days.ago }
-    clearance :member
-    registration { 3.months.ago }
-    is_online true
+    transient do
+      sequence(:name) { |n| "Test User #{n}" }
+      id { Lobster::Uuid.generate }
+      last_login { 2.days.ago }
+      clearance :member
+      registration { 3.months.ago }
+      is_online true
+    end
 
     trait :guest do
       clearance :guest
@@ -41,10 +43,10 @@ FactoryGirl.define do
     end
 
     initialize_with do
-      if registration
-        Lobster::Users::User.member(id, name, is_online, clearance, registration, last_login)
-      else
+      if clearance == :guest
         Lobster::Users::User.guest(id, name, is_online, last_login)
+      else
+        Lobster::Users::User.member(id, name, is_online, clearance, registration, last_login)
       end
     end
 
