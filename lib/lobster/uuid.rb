@@ -16,9 +16,10 @@ module Lobster
     # @return [String] Packed string, 16 bytes in length.
     attr_reader :value
 
-    # Creates a new randomly generated UUID or one from an existing value.
+    # Creates a UUID or one from an existing value.
     # @param value [String] Packed bytes with the UUID's value.
     #   The value must be a string of 16 bytes (128 bits).
+    # @see generate
     def initialize(value)
       value_str = value.to_s
       fail ArgumentError, 'Packed UUID value must be 16 bytes.' unless value_str.length == 16
