@@ -34,10 +34,6 @@ RSpec.describe Lobster::Uuid do
     end
 
     context 'with an invalid value' do
-      it 'rejects a non-string' do
-        expect { Lobster::Uuid.new(5) }.to raise_error(ArgumentError)
-      end
-
       it 'rejects a malformed string' do
         expect { Lobster::Uuid.new('foobar') }.to raise_error(ArgumentError)
       end
