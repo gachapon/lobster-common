@@ -12,12 +12,12 @@ module Lobster
       # This can also be thought of as the last time the user went from offline to online.
       # @note This attribute will be +nil+ if a user hasn't logged in.
       # @return [Time, nil]
-      attr_accessor :last_login
+      attr_reader :last_login
 
       # Date and time the member registered an account.
       # This attribute will be +nil+ for guests, since they have not registered.
       # @return [Time, nil]
-      attr_accessor :registration
+      attr_reader :registration
 
       # Indicates whether the user is actively using the service.
       def online?
@@ -32,7 +32,7 @@ module Lobster
       #   - +:mod+    - Basic staff member.
       #   - +:admin+  - Higher staff member - typically a server owner.
       #   - +:super+  - Internal user.
-      attr_accessor :clearance
+      attr_reader :clearance
 
       # Indicates whether the user has a registered account.
       # @return [Boolean] +true+ if the user *does not* have an account.
