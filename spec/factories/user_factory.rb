@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :user, aliases: [:member], class: Lobster::Users::User do
     sequence(:name) { |n| "Test User #{n}" }
-    id { Lobster::Uuid.new }
+    id { Lobster::Uuid.generate }
     last_login { 2.days.ago }
     clearance :member
     registration { 3.months.ago }

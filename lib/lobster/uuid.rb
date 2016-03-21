@@ -17,27 +17,27 @@ module Lobster
     attr_reader :value
 
     # Creates a new randomly generated UUID or one from an existing value.
-    # @param value [String, nil] When omitted, a random UUID is generated.
-    #   When specified, a UUID will be created with its value.
+    # @param value [String] Packed bytes with the UUID's value.
     #   The value must be a string of 16 bytes (128 bits).
-    def initialize(value = nil)
-      if value.nil?
-        # When the value is omitted, generate a new, random UUID.
-        @value = generate_new
+    def initialize(value)
+      fail ArgumentError, 'Packed UUID value must be 16 bytes.' unless value.length == 16
 
-      elsif value.is_a? String
-        # A value was provided. It should contain the packed value.
-        fail ArgumentError, 'Packed UUID value must be 16 bytes.' unless value.length == 16
-        @value = value
-
-      else
-        # Got something unexpected.
-        fail ArgumentError
-
-      end
+      # Get a copy to prevent external processes modifying the value.
+      @value = value.to_s.dup
 
       # Prevent modification.
       @value.freeze
+    end
+
+    # Generates a new (and random) UUID
+    # @return [UUID] Newly generated UUID.
+    def self.generate
+      # A built-in method from Ruby to generate a valid UUID is SecureRandom.uuid.
+      # However, it returns it as a formatted string.
+      # The formatted string has to be converted to a packed string before it can be used.
+      uuid_str = SecureRandom.uuid
+      value    = pack_uuid_str(uuid_str)
+      Uuid.new(value)
     end
 
     # Determines whether a string contains a valid formatted UUID.
@@ -165,16 +165,6 @@ module Lobster
     DEFAULT = Uuid.new("\x0" * 16).freeze
 
     private
-
-    # Generates a new (and random) UUID
-    # @return [String] Packed string containing the UUID's value.
-    def generate_new
-      # A built-in method from Ruby to generate a valid UUID is SecureRandom.uuid.
-      # However, it returns it as a formatted string.
-      # The formatted string has to be converted to a packed string before it can be used.
-      uuid_str = SecureRandom.uuid
-      self.class.pack_uuid_str(uuid_str)
-    end
 
     # Checks for equality between two UUID instances.
     # @param other [Uuid] Other UUID to compare against.

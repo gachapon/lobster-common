@@ -531,7 +531,7 @@ RSpec.describe Lobster::Users::User do
   end
 
   describe '#id' do
-    let(:id) { Lobster::Uuid.new }
+    let(:id) { Lobster::Uuid.generate }
     subject(:user) { build(:user, id: id) }
     subject { user.id }
 
@@ -567,7 +567,7 @@ RSpec.describe Lobster::Users::User do
   end
 
   describe '.guest' do
-    let(:id) { Lobster::Uuid.new }
+    let(:id) { Lobster::Uuid.generate }
     let(:name) { 'Guest User' }
     let(:is_online) { true }
     let(:last_login) { 1.days.ago }
@@ -639,7 +639,7 @@ RSpec.describe Lobster::Users::User do
   end
 
   describe '.member' do
-    let(:id) { Lobster::Uuid.new }
+    let(:id) { Lobster::Uuid.generate }
     let(:name) { 'Guest User' }
     let(:is_online) { true }
     let(:clearance) { :member }
