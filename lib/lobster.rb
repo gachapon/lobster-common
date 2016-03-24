@@ -8,6 +8,8 @@ require_relative 'lobster/abstract_attribute'
 require_relative 'lobster/error_codes'
 require_relative 'lobster/error'
 require_relative 'lobster/result'
+require_relative 'lobster/success'
+require_relative 'lobster/failure'
 require_relative 'lobster/uuid'
 require_relative 'lobster/identifiable'
 
