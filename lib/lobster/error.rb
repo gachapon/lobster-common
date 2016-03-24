@@ -19,7 +19,7 @@ module Lobster
     # @param data [Hash{Symbol => String}] Extra information associated with the error.
     def initialize(code, data = {})
       @code = code
-      @data = (data.dup || Hash.new).freeze
+      @data = data.dup.freeze
     end
 
     # Generates a string representation of the error.
