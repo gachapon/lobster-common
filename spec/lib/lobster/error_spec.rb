@@ -31,14 +31,6 @@ RSpec.describe Lobster::Error do
     it 'contains the expected values' do
       is_expected.to eq data
     end
-
-    describe 'contents' do
-      subject { error.data[:foo] }
-
-      it 'is frozen' do
-        is_expected.to be_frozen
-      end
-    end
   end
 
   describe '#to_s' do
@@ -70,7 +62,7 @@ RSpec.describe Lobster::Error do
     end
 
     context 'with no data' do
-      let(:data) { nil }
+      let(:data) { Hash.new }
 
       it 'doesn\'t include data' do
         is_expected.to eq 'Error: UNEXPECTED'
@@ -79,30 +71,8 @@ RSpec.describe Lobster::Error do
   end
 
   describe '#new' do
-    it 'rejects non-integer codes' do
-      expect { Lobster::Error.new('foobar') }.to raise_error ArgumentError
-    end
-
-    it 'rejects a nil code' do
-      expect { Lobster::Error.new(nil) }.to raise_error ArgumentError
-    end
-
     it 'accepts unknown integer codes' do
       expect { Lobster::Error.new(-1) }.to_not raise_error
-    end
-
-    it 'rejects non-hash data' do
-      expect { Lobster::Error.new(code, 'foobar') }.to raise_error ArgumentError
-    end
-
-    context 'with nil data' do
-      let(:data) { nil }
-      subject { error.data }
-
-      it 'uses an empty hash' do
-        expect { error }.to_not raise_error
-        is_expected.to eq Hash.new
-      end
     end
 
     it 'clones the data' do
