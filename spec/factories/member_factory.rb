@@ -9,17 +9,17 @@ FactoryGirl.define do
       registration { 1.months.ago }
     end
 
-    trait :moderator do
+    trait :mod do
       clearance :mod
     end
 
-    trait :administrator do
+    trait :admin do
       clearance :admin
     end
 
     initialize_with { new(id, name, is_online, last_login, clearance, registration) }
 
-    factory :mod, traits: [:moderator]
-    factory :admin, traits: [:administrator]
+    factory :mod, traits: [:mod]
+    factory :admin, traits: [:admin]
   end
 end
