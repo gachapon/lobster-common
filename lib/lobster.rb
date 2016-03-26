@@ -14,3 +14,4 @@ require_relative 'lobster/uuid'
 require_relative 'lobster/identifiable'
 
 require_relative 'lobster/users'
+require_relative 'lobster/rooms'
