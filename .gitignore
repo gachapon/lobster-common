@@ -142,3 +142,6 @@ tags
 
 ### RSpec ###
 examples.txt
+
+### Inspections ###
+rubocop.xml
