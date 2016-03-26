@@ -24,6 +24,7 @@ Rather, it contains the "language" needed for clients and servers to communicate
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'factory_girl', '~> 4.0'
+  spec.add_development_dependency 'reek', '~> 3.0'
   spec.add_development_dependency 'rubocop', '~> 0.38.0'
   spec.add_development_dependency 'rubocop-checkstyle_formatter'
   spec.add_development_dependency 'codeclimate-test-reporter'

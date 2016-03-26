@@ -145,3 +145,4 @@ examples.txt
 
 ### Inspections ###
 rubocop.xml
+reek.xml
