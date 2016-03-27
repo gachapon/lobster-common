@@ -1,11 +1,7 @@
 require 'simplecov'
 SimpleCov.start do
-  if ENV['TEAMCITY_VERSION']
-    require 'simplecov-teamcity-summary'
-    at_exit do
-      SimpleCov::Formatter::TeamcitySummaryFormatter.new.format(SimpleCov.result)
-    end
-  end
+  add_filter '/spec/'
+  add_filter '/vendor/'
 end
 
 # Code Climate test coverage.
