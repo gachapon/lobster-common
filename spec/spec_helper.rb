@@ -1,3 +1,13 @@
+require 'simplecov'
+SimpleCov.start do
+  if ENV['TEAMCITY_VERSION']
+    require 'simplecov-teamcity-summary'
+    at_exit do
+      SimpleCov::Formatter::TeamcitySummaryFormatter.new.format(SimpleCov.result)
+    end
+  end
+end
+
 # Code Climate test coverage.
 begin
   require 'codeclimate-test-reporter'

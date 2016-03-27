@@ -27,6 +27,8 @@ Rather, it contains the "language" needed for clients and servers to communicate
   spec.add_development_dependency 'reek', '~> 3.0'
   spec.add_development_dependency 'rubocop', '~> 0.38.0'
   spec.add_development_dependency 'rubocop-checkstyle_formatter'
+  spec.add_development_dependency 'simplecov'
+  spec.add_development_dependency 'simplecov-teamcity-summary'
   spec.add_development_dependency 'codeclimate-test-reporter'
   spec.add_development_dependency 'yard'
 end
