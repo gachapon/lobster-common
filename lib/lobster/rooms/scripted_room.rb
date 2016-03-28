@@ -1,11 +1,11 @@
-require_relative 'room'
+require_relative 'chat_room'
 
 module Lobster
   module Rooms
 
     # Information about a room with a script running in it.
     # Scripted rooms allow custom events, games, and programs to run in rooms.
-    class ScriptedRoom < Room
+    class ScriptedRoom < ChatRoom
 
       # ID of the script running in the room.
       # @return [Uuid]
