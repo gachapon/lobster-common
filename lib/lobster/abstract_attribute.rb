@@ -1,6 +1,8 @@
 # Custom class attributes.
 class Class
 
+  private
+
   # Defines an abstract method.
   # The method will throw a {NotImplementedError} when invoked.
   # This requires that the method be defined in a sub-class.
