@@ -1,3 +1,9 @@
+require 'simplecov'
+SimpleCov.start do
+  add_filter '/spec/'
+  add_filter '/vendor/'
+end
+
 # Code Climate test coverage.
 begin
   require 'codeclimate-test-reporter'
